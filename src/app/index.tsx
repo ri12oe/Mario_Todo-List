@@ -87,7 +87,7 @@ export default function HomeScreen() {
           <View style={styles.listItem}>
             <Text style={styles.listText}>{item}</Text>
             <Pressable onPress={() => deleteItem(index)}>
-              <Ionicons name="trash" size={24} color="#7a3fff" />
+              <Ionicons name="trash" size={24} color="#eee" />
             </Pressable>
           </View>}
         />
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Poppins_600SemiBold",
     textDecorationLine: "underline",
+    marginTop: 32,
   },
   subtitle: {
     color: "black",
@@ -134,13 +135,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listContainer: {
-
+    width: "50%",
   },
   listItem: {
-
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#7a3fff",
+    justifyContent: "space-between",
+    borderRadius: 15,
+    width: "100%",
+    padding: 15,
+    marginTop: 15,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   listText: {
-
+    color: "#eee"
   },
   input: {
     borderWidth: 1,
@@ -154,6 +166,7 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     marginBottom: 16,
+    fontFamily: "Poppins_600SemiBold"
   },
   button: {
     backgroundColor: "#7a3fff",
@@ -171,5 +184,6 @@ const styles = StyleSheet.create({
     fontSize: 42,
     color: "white",
     textAlign: "center",
+    fontFamily: "Poppins_600SemiBold",
   },
 });
