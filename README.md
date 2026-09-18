@@ -57,9 +57,7 @@ npm -v
 
 Open a terminal in the project root folder:
 
-```bash
-cd c:\Users\maesp\FA26\n322\Mario_Todo-List
-```
+
 
 If you are already inside the folder, skip this step.
 
