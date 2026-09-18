@@ -55,6 +55,7 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <Text style={styles.dataTitle}>{formatted}</Text>
+        <Text style={styles.subtitle}>To-Do List</Text>
       </SafeAreaView>
     </ThemedView>
   );
@@ -76,7 +77,14 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
   },
   dataTitle: {
-    color: "black",
-    fontFamily: "Poppins_600SemiBold"
+    color: "#7A3FFF",
+    fontSize: 24,
+    fontFamily: "Poppins_600SemiBold",
+    textDecorationLine: "underline",
   },
+  subtitle: {
+    color: "black",
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 18,
+  }
 });
