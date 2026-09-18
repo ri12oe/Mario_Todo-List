@@ -1,19 +1,31 @@
-import * as Device from "expo-device";
-import { Platform, StyleSheet, Text, FlatList, Pressable, View, TextInput} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/themed-view";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-import { useCallback, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  useFonts,
   Poppins_400Regular,
   Poppins_600SemiBold,
+  useFonts,
 } from "@expo-google-fonts/poppins";
 
+type TodoItem = {
+  id: number;
+  text: string;
+  done: boolean;
+};
+
 function getTodayKey() {
-  return new Date().toISOString().split("T")[0]; // 2026-09-18
+  return new Date().toISOString().split("T")[0];
 }
 
 function useTodayDate() {
@@ -35,8 +47,6 @@ function useTodayDate() {
   return today;
 }
 
-
-
 export default function HomeScreen() {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -44,7 +54,7 @@ export default function HomeScreen() {
   });
 
   const [item, setItem] = useState("");
-  const [lists, setLists] = useState<string[]>([]);
+  const [lists, setLists] = useState<TodoItem[]>([]);
 
   const today = useTodayDate();
   const formatted = new Date(today).toLocaleDateString("en-US", {
@@ -53,25 +63,37 @@ export default function HomeScreen() {
     day: "numeric",
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
-
   function addItem() {
-    if (item.trim() == ""){
+    if (item.trim() === "") {
       return;
     }
-    setLists([...lists, item.trim()]);
+
+    setLists((current) => [
+      ...current,
+      {
+        id: Date.now(),
+        text: item.trim(),
+        done: false,
+      },
+    ]);
+
     setItem("");
   }
 
-  function deleteItem(index: number) {
-    const newGroceries = lists.filter (
-    (item, itemIndex) => itemIndex !== index
+  function toggleDone(id: number) {
+    setLists((current) =>
+      current.map((todo) =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo,
+      ),
     );
-    setLists(newGroceries);
-    
+  }
+
+  function deleteItem(id: number) {
+    setLists((current) => current.filter((todo) => todo.id !== id));
+  }
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
@@ -79,26 +101,45 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeArea}>
         <Text style={styles.dataTitle}>{formatted}</Text>
         <Text style={styles.subtitle}>To-Do List</Text>
-        <FlatList 
+
+        <FlatList
           style={styles.listContainer}
           data={lists}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => 
-          <View style={styles.listItem}>
-            <Text style={styles.listText}>{item}</Text>
-            <Pressable onPress={() => deleteItem(index)}>
-              <Ionicons name="trash" size={24} color="#eee" />
-            </Pressable>
-          </View>}
+          keyExtractor={(todo) => todo.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.listItem}>
+              <Pressable
+                onPress={() => toggleDone(item.id)}
+                style={styles.checkButton}
+              >
+                <Ionicons
+                  name={
+                    item.done ? "checkmark-circle" : "checkmark-circle-outline"
+                  }
+                  size={24}
+                  color="#fff"
+                />
+              </Pressable>
+
+              <Text style={[styles.listText, item.done && styles.checkedText]}>
+                {item.text}
+              </Text>
+
+              <Pressable onPress={() => deleteItem(item.id)}>
+                <Ionicons name="trash" size={24} color="#eee" />
+              </Pressable>
+            </View>
+          )}
         />
 
-        <TextInput 
+        <TextInput
           style={styles.input}
-          placeholder="Add an item...."
-          placeholderTextColor= "#6b7280"
+          placeholder="Add an item..."
+          placeholderTextColor="#6b7280"
           value={item}
           onChangeText={setItem}
         />
+
         <Pressable style={styles.button} onPress={addItem}>
           <Text style={styles.buttonText}>+</Text>
         </Pressable>
@@ -135,7 +176,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listContainer: {
-    width: "50%",
+    width: "100%",
+    maxWidth: 420,
   },
   listItem: {
     flexDirection: "row",
@@ -151,22 +193,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
   },
+  checkButton: {
+    marginRight: 10,
+  },
   listText: {
-    color: "#eee"
+    flex: 1,
+    color: "#eee",
+    fontFamily: "Poppins_600SemiBold",
+  },
+  checkedText: {
+    textDecorationLine: "line-through",
+    opacity: 0.7,
   },
   input: {
     borderWidth: 1,
     borderColor: "#999",
     borderRadius: 15,
-    padding: 12,
-    width: "50%",
+    width: "100%",
+    maxWidth: 420,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    maxWidth: 420,
     color: "black",
     textAlign: "center",
     marginBottom: 16,
-    fontFamily: "Poppins_600SemiBold"
+    fontFamily: "Poppins_600SemiBold",
+    backgroundColor: "#fff",
   },
   button: {
     backgroundColor: "#7a3fff",
