@@ -1,49 +1,60 @@
 import * as Device from "expo-device";
-import { Platform, StyleSheet, Text, TextInputChangeEvent } from "react-native";
+import { Platform, StyleSheet, Text, } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/themed-view";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 import { useCallback, useEffect, useState } from "react";
 
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_600SemiBold,
+} from "@expo-google-fonts/poppins";
+
+function getTodayKey() {
+  return new Date().toISOString().split("T")[0]; // 2026-09-18
+}
+
+function useTodayDate() {
+  const [today, setToday] = useState(getTodayKey());
+
+  useEffect(() => {
+    const now = new Date();
+    const nextMidnight = new Date(now);
+    nextMidnight.setHours(24, 0, 0, 0);
+    const msUntilMidnight = nextMidnight.getTime() - now.getTime();
+
+    const timeout = setTimeout(() => {
+      setToday(getTodayKey());
+    }, msUntilMidnight);
+
+    return () => clearTimeout(timeout);
+  }, [today]);
+
+  return today;
+}
+
 export default function HomeScreen() {
-  function getTodayKey() {
-    return new Date().toISOString().split("T")[0]; // 2026-09-18
-  }
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_600SemiBold,
+  });
 
-  function useTodayDate() {
-    const [today, setToday] = useState(getTodayKey());
+  const today = useTodayDate();
+  const formatted = new Date(today).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
-    useEffect(() => {
-      const now = new Date();
-      const nextMidnight = new Date(now);
-      nextMidnight.setHours(24, 0, 0, 0);
-      const msUntilMidnight = nextMidnight.getTime() - now.getTime();
-
-      const timeout = setTimeout(() => {
-        setToday(getTodayKey());
-      }, msUntilMidnight);
-
-      return () => clearTimeout(timeout);
-    }, [today]);
-
-    return today;
-  }
-
-  function TodayDisplay() {
-    const today = useTodayDate();
-    const formatted = new Date(today).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-    return <Text style={styles.dataTitle}>Today is: {formatted}</Text>;
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <TodayDisplay />
+        <Text style={styles.dataTitle}>{formatted}</Text>
       </SafeAreaView>
     </ThemedView>
   );
@@ -54,6 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     flexDirection: "row",
+    backgroundColor: "#eee",
   },
   safeArea: {
     flex: 1,
@@ -64,6 +76,7 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
   },
   dataTitle: {
-    color: "white",
+    color: "black",
+    fontFamily: "Poppins_600SemiBold"
   },
 });
