@@ -1,6 +1,17 @@
 # Mario Todo List
 
-![Mario Todo List app screenshot](assets/images/grid.png)
+## Screenshots
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="25%"><img src="assets/images/IMG_1143.PNG" alt="App screenshot 1" width="220" /></td>
+      <td width="25%"><img src="assets/images/IMG_1144.PNG" alt="App screenshot 2" width="220" /></td>
+      <td width="25%"><img src="assets/images/IMG_1145.PNG" alt="App screenshot 3" width="220" /></td>
+      <td width="25%"><img src="assets/images/IMG_1146.PNG" alt="App screenshot 4" width="220" /></td>
+    </tr>
+  </table>
+</div>
 
 A simple Expo + React Native to-do list app built with Expo Router. This project shows a daily date header, a list of tasks, add-item input, and a completion toggle with a strike-through effect.
 
