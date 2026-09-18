@@ -92,9 +92,10 @@ export default function HomeScreen() {
           </View>}
         />
 
-        <TextInput
+        <TextInput 
           style={styles.input}
           placeholder="Add an item...."
+          placeholderTextColor= "#6b7280"
           value={item}
           onChangeText={setItem}
         />
@@ -146,10 +147,13 @@ const styles = StyleSheet.create({
     borderColor: "#999",
     borderRadius: 15,
     padding: 12,
-    width: "55%",
+    width: "50%",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    maxWidth: 420,
     color: "black",
     textAlign: "center",
-    marginBottom: 32,
+    marginBottom: 16,
   },
   button: {
     backgroundColor: "#7a3fff",
